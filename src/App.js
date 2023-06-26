@@ -9,7 +9,7 @@ const defaultTodos = [
   {text: 'Cortar cebolla', completed:true},
   {text: 'Tomar el Curso de Intro a React.js', completed:false},
   {text: 'Llorar con la llorona', completed:false},
-  {text: 'otro', completed:false},
+  {text: 'LALALA', completed:false},
   {text: 'usar estados derivados', completed:true},
   
 ];
@@ -28,6 +28,17 @@ function App() {
       todo => !!todo.completed 
       ).length;
   const totalTodos = todos.length;
+    
+  const searchedTodos = todos.filter(
+    (todo) => {
+      // mejorando el código
+      // return todo.text.toLowerCase().includes(searchValue.toLowerCase());
+      const todoText = todo.text.toLowerCase();
+      const searchText = searchValue.toLocaleLowerCase();
+      return todoText.includes(searchText);
+    }
+  );
+  
   return (
     <React.Fragment>
 
@@ -38,7 +49,7 @@ function App() {
       />
 
       <TodoList>
-        {defaultTodos.map(todo => (
+        {searchedTodos.map(todo => (
           <TodoItem 
             key={todo.text}
             text={todo.text}
