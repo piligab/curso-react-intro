@@ -39,6 +39,31 @@ function App() {
     }
   );
   
+  // una fx que espera un parámetro
+  const completeTodo = (text) => {
+    // copia de todos con los 3 puntos
+    const newTodos = [...todos];
+    const todoIndex = newTodos.findIndex(
+    // recibir a c/u de los todos y c/u de todos tiene propiedad.text, 
+    // si eso es = a ese texto que recibimos, es el todo que necesitamos
+      (todo) => todo.text == text
+    );
+    newTodos[todoIndex].completed = true;
+    setTodos(newTodos);
+  }
+
+  // una fx que espera un parámetro
+  const deleteTodo= (text) => {
+    // copia de todos con los 3 puntos
+    const newTodos = [...todos];
+    const todoIndex = newTodos.findIndex(
+    // recibir a c/u de los todos y c/u de todos tiene propiedad.text, 
+    // si eso es = a ese texto que recibimos, es el todo que necesitamos
+      (todo) => todo.text == text
+    );
+    newTodos.splice(todoIndex, 1);
+    setTodos(newTodos); 
+  } 
   return (
     <React.Fragment>
 
@@ -54,6 +79,10 @@ function App() {
             key={todo.text}
             text={todo.text}
             completed={todo.completed}
+            // vamos a enviarle un actualizador de estado, crear una función que realice todo
+            // fx de fxs
+            onComplete={() => completeTodo(todo.text)}
+            onDelete={() => deleteTodo(todo.text)}
           />
         ))}
       </TodoList>
