@@ -1,10 +1,10 @@
-import { TodoItem } from './TodoItem';
-import { TodoCounter } from './TodoCounter';
-import { TodoSearch } from './TodoSearch';
-import { TodoList } from './TodoList';
-import { TodoCreateButton } from './TodoCreateButton';
+import { TodoItem } from '../TodoItem';
+import { TodoCounter } from '../TodoCounter';
+import { TodoSearch } from '../TodoSearch';
+import { TodoList } from '../TodoList';
+import { TodoCreateButton } from '../TodoCreateButton';
 import React from 'react';
-
+import { useLocalStorage } from './useLocalStorage';
 // const defaultTodos = [
 //   {text: 'Cortar cebolla', completed:true},
 //   {text: 'Tomar el Curso de Intro a React.js', completed:false},
@@ -13,31 +13,6 @@ import React from 'react';
 //   {text: 'usar estados derivados', completed:true},  
 // ];
 //  localStorage.setItem('TODOS_V1', JSON.stringify(defaultTodos));
-
-
-// hook
-function useLocalStorage(itemName, initialValue){
-
-  const localStorageItem = localStorage.getItem(itemName);
-  let parsedItem;
-  // si el storage no tiene nada, se crea un array vacio
-  if (!localStorageItem){
-    localStorage.setItem(itemName, JSON.stringify(initialValue));
-    parsedItem = initialValue;
-  } else {
-    parsedItem = JSON.parse(localStorageItem);
-  }
-  const [item, setItem] = React.useState(parsedItem);
-
-
-  // guardar los todos en el local storage
-  const saveItem = (newItem) => {
-    localStorage.setItem(itemName, JSON.stringify(newItem));
-    // guardar en el estado
-    setItem(newItem);
-  };
-  return [item, saveItem];
-}
 
 
 function App() {
@@ -72,7 +47,7 @@ function App() {
     const todoIndex = newTodos.findIndex(
     // recibir a c/u de los todos y c/u de todos tiene propiedad.text, 
     // si eso es = a ese texto que recibimos, es el todo que necesitamos
-      (todo) => todo.text == text
+      (todo) => todo.text === text
     );
     newTodos[todoIndex].completed = true;
     saveTodos(newTodos);
@@ -85,7 +60,7 @@ function App() {
     const todoIndex = newTodos.findIndex(
     // recibir a c/u de los todos y c/u de todos tiene propiedad.text, 
     // si eso es = a ese texto que recibimos, es el todo que necesitamos
-      (todo) => todo.text == text
+      (todo) => todo.text === text
     );
     newTodos.splice(todoIndex, 1);
     saveTodos(newTodos); 
