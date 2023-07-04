@@ -5,18 +5,28 @@ import { TodoList } from './TodoList';
 import { TodoCreateButton } from './TodoCreateButton';
 import React from 'react';
 
-const defaultTodos = [
-  {text: 'Cortar cebolla', completed:true},
-  {text: 'Tomar el Curso de Intro a React.js', completed:false},
-  {text: 'Llorar con la llorona', completed:false},
-  {text: 'LALALA', completed:false},
-  {text: 'usar estados derivados', completed:true},
-  
-];
-
+// const defaultTodos = [
+//   {text: 'Cortar cebolla', completed:true},
+//   {text: 'Tomar el Curso de Intro a React.js', completed:false},
+//   {text: 'Llorar con la llorona', completed:false},
+//   {text: 'LALALA', completed:false},
+//   {text: 'usar estados derivados', completed:true},  
+// ];
+//  localStorage.setItem('TODOS_V1', JSON.stringify(defaultTodos));
 function App() {
+  const localStorageTodos = localStorage.getItem('TODOS_V1');
+  let parsedTodos;
+  // si el storage no tiene nada, se crea un array vacio
+  if (!localStorageTodos){
+    localStorage.setItem('TODOS_V1', JSON.stringify([]));
+    parsedTodos = [];
+  } else {
+    parsedTodos = JSON.parse(localStorageTodos);
+  }
+  
+  
   // estado del todo
-  const [todos, setTodos] = React.useState(defaultTodos);
+  const [todos, setTodos] = React.useState(parsedTodos);
   // estado del todoSearch
   const [searchValue, setSearchValue] = React.useState('');
   console.log('Los usuarios buscan todos de ' + searchValue);
@@ -38,7 +48,13 @@ function App() {
       return todoText.includes(searchText);
     }
   );
-  
+  // guardar los todos en el local storage
+  const saveTodos = (newTodos) => {
+    localStorage.setItem('TODOS_V1', JSON.stringify(newTodos));
+    // guardar en el estado
+    setTodos(newTodos);
+  };
+
   // una fx que espera un parámetro
   const completeTodo = (text) => {
     // copia de todos con los 3 puntos
@@ -49,7 +65,7 @@ function App() {
       (todo) => todo.text == text
     );
     newTodos[todoIndex].completed = true;
-    setTodos(newTodos);
+    saveTodos(newTodos);
   }
 
   // una fx que espera un parámetro
@@ -62,7 +78,7 @@ function App() {
       (todo) => todo.text == text
     );
     newTodos.splice(todoIndex, 1);
-    setTodos(newTodos); 
+    saveTodos(newTodos); 
   } 
   return (
     <React.Fragment>
