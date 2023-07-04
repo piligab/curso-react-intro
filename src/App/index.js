@@ -1,10 +1,7 @@
-import { TodoItem } from '../TodoItem';
-import { TodoCounter } from '../TodoCounter';
-import { TodoSearch } from '../TodoSearch';
-import { TodoList } from '../TodoList';
-import { TodoCreateButton } from '../TodoCreateButton';
 import React from 'react';
+import { AppUI } from './AppUI';
 import { useLocalStorage } from './useLocalStorage';
+
 // const defaultTodos = [
 //   {text: 'Cortar cebolla', completed:true},
 //   {text: 'Tomar el Curso de Intro a React.js', completed:false},
@@ -13,6 +10,7 @@ import { useLocalStorage } from './useLocalStorage';
 //   {text: 'usar estados derivados', completed:true},  
 // ];
 //  localStorage.setItem('TODOS_V1', JSON.stringify(defaultTodos));
+// localStorage.removeItem('YODOS_V1');
 
 
 function App() {
@@ -20,7 +18,7 @@ function App() {
   const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
   // estado del todoSearch
   const [searchValue, setSearchValue] = React.useState('');
-  console.log('Los usuarios buscan todos de ' + searchValue);
+  // console.log('Los usuarios buscan todos de ' + searchValue);
 
   // estados derivados
   // porqué aquí el nombre cambia todos - todo?
@@ -66,30 +64,15 @@ function App() {
     saveTodos(newTodos); 
   } 
   return (
-    <React.Fragment>
-
-      <TodoCounter completed={completedTodos} total={totalTodos}/>
-      <TodoSearch 
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-      />
-
-      <TodoList>
-        {searchedTodos.map(todo => (
-          <TodoItem 
-            key={todo.text}
-            text={todo.text}
-            completed={todo.completed}
-            // vamos a enviarle un actualizador de estado, crear una función que realice todo
-            // fx de fxs
-            onComplete={() => completeTodo(todo.text)}
-            onDelete={() => deleteTodo(todo.text)}
-          />
-        ))}
-      </TodoList>
-
-      <TodoCreateButton />    
-      </React.Fragment>
+    <AppUI
+      completedTodos = {completedTodos}
+      totalTodos = {totalTodos}
+      searchValue = {searchValue} 
+      setSearchValue = {setSearchValue} 
+      searchedTodos = {searchedTodos}
+      completeTodo = {completeTodo}
+      deleteTodo = {deleteTodo}
+    />
   );
 }
 
