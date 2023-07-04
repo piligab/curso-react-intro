@@ -13,20 +13,36 @@ import React from 'react';
 //   {text: 'usar estados derivados', completed:true},  
 // ];
 //  localStorage.setItem('TODOS_V1', JSON.stringify(defaultTodos));
-function App() {
-  const localStorageTodos = localStorage.getItem('TODOS_V1');
-  let parsedTodos;
+
+
+// hook
+function useLocalStorage(itemName, initialValue){
+
+  const localStorageItem = localStorage.getItem(itemName);
+  let parsedItem;
   // si el storage no tiene nada, se crea un array vacio
-  if (!localStorageTodos){
-    localStorage.setItem('TODOS_V1', JSON.stringify([]));
-    parsedTodos = [];
+  if (!localStorageItem){
+    localStorage.setItem(itemName, JSON.stringify(initialValue));
+    parsedItem = initialValue;
   } else {
-    parsedTodos = JSON.parse(localStorageTodos);
+    parsedItem = JSON.parse(localStorageItem);
   }
-  
-  
+  const [item, setItem] = React.useState(parsedItem);
+
+
+  // guardar los todos en el local storage
+  const saveItem = (newItem) => {
+    localStorage.setItem(itemName, JSON.stringify(newItem));
+    // guardar en el estado
+    setItem(newItem);
+  };
+  return [item, saveItem];
+}
+
+
+function App() {
   // estado del todo
-  const [todos, setTodos] = React.useState(parsedTodos);
+  const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
   // estado del todoSearch
   const [searchValue, setSearchValue] = React.useState('');
   console.log('Los usuarios buscan todos de ' + searchValue);
@@ -48,12 +64,6 @@ function App() {
       return todoText.includes(searchText);
     }
   );
-  // guardar los todos en el local storage
-  const saveTodos = (newTodos) => {
-    localStorage.setItem('TODOS_V1', JSON.stringify(newTodos));
-    // guardar en el estado
-    setTodos(newTodos);
-  };
 
   // una fx que espera un parámetro
   const completeTodo = (text) => {
